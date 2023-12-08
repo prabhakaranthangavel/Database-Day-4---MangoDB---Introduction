@@ -1,0 +1,326 @@
+Contents
+
+1.Normalization
+2.Installation of Mongodb
+3.Intro to MongoDB
+4.What is document?
+5.What is collection?
+6.Mongodb vs MySQL
+7.MongoDB creation of database, collections, documents
+8.find() methods & projection methods
+9.use of operators in find() query"
+
+10.Refer to MySQL & MongoDB Comparison
+   https://github.com/rvsp/database/blob/master/sql-mongo_comparison.md
+
+*************************************************************************************************************************
+
+1.Normalization : 
+
+===>Normalization is a process of organizing the data in the database.
+    data ஐ database ல் organizing செய்வதற்காக Normalization என்ற process ஐ பயன்படுத்துகிறோம்.
+
+===>The goal of normalization is to reduce the data redundancy (duplicate data) and increase the data integrity (accuracy and consistency of the data).
+    duplicate data ஐ reduce செய்வதற்கு பயன்படுகிறது.
+
+===>There are different levels of normalization 
+    ***1NF  : First Normal Form 
+    ***2NF  : Second Normal Form 
+    ***3NF  : Third Normal Form 
+    ***BCNF : Boyce-Codd Normal Form 
+    ***4NF  : Fourth Normal Form 
+    ***5NF  : Fifth Normal Form 
+    ***6NF  : Sixth Normal Form
+
+===>Example:
+
+    Given a table called "studentcourses" with the following columns:
+    studentid      : int
+    studentname    : varchar(255)
+    courseid       : int
+    coursename     : varchar(255)
+    courseduration : int
+    
+    If a table has to be in First Normal Form
+    1NF ஆக இருக்க,
+    -It should not have any repeating columns.
+     மீண்டும் மீண்டும் columns ஆனது repeated ஆக இருக்கக்கூடாது அல்லது வரக்கூடாது.
+    -All columns must have atomic values.
+     value ஆனது unique ஆக இருக்க வேண்டும்.
+    -The order in which data is stored does not matter.
+    
+    
+    -The above table is not in 1NF as it has repeating columns.
+     மேலே உள்ள table 1NF ல் இல்லை, ஏனெனில் அது மீண்டும் மீண்டும் columns கொண்டுள்ளது.
+
+    -So it,To make it 1NF, we need to split the table into two tables.
+     எனவே, அதை 1NF ஆக மாற்ற, இரண்டு table களாக பிரித்துக் கொள்கிறோம்.
+
+    table 1: students
+                studentid      : int
+                studentname    : varchar(255)
+
+     table 2: courses
+                courseid       : int
+                coursename     : varchar(255)
+                courseduration : int
+
+*************************************************************************************************************************
+
+Just to find out:
+
+Workbench installation:
+
+Search => MySQL Workbench => Download Now => Select Operating System => Microsoft Windows
+       => Windows (x86, 64-bit), MSI Installer => Download => No thanks, just start my download.
+       => Downloading .... => Local instance MySQL 82 => Password => Open
+
+*************************************************************************************************************************
+
+2.Installation of Mongodb
+
+MongoDB installation:
+
+Search => https://www.mongodb.com/try/download/community => MongoDB Community Server Download
+       => Select package => Platform => Windows * 64 => Package => msi => Download
+
+Search => https://www.mongodb.com/try/download/compass => Version (1.40.4 Stable)
+       => Platform => Windows * 64 (10+) or (10+msi) => Package => exe => Download
+
+       => URI = > mongodb://localhost:27017 => connect => 
+
+Search => https://www.mongodb.com/try/download/shell => Version (2.1.1)
+       => Platform => Windows * 64 => Package => msi => Download
+
+சரியான முறையில் install ஆகிவிட்டதா அல்லது download ஆகிவிட்டதா என்பதை கண்டுபிடிக்க
+To find out whether it is properly installed or downloaded
+
+cmd prompt ல் => mongosh --version என்று கொடுத்தால்
+                 2.1.1 என்று வரவேண்டும்.
+
+host ஐ connect செய்ய     => mongosh mongodb://localhost:27017 
+mongodb://localhost:27017  => paste செய்தால் connect ஆகிவிடும்.
+
+*************************************************************************************************************************
+
+3.Intro to MongoDB
+
+===>MongoDB is a database
+    MongoDB என்பது ஒரு database ஆகும்.
+
+===>கிட்டத்தட்ட MySQL போன்றது.
+
+===>MongoDB is a NoSQL database, which means it stores data in JSON-like documents.
+    
+    MySQL என்பது Relational Database ஆகும்.
+    இதுவே MongoDB என்பது Non Relational Database ஆகும்.UnStructured Database என்றும் கூறலாம்.
+    store செய்யக்கூடிய data ஐ JSON ல் தான் சேமித்து வைப்போம் அல்லது JSON ஆக இருக்கும்.
+
+===>It is a document-oriented database, which means it stores data in documents instead of tables.
+    JSON documents ஆக store செய்வதால் அதனை document-oriented database என்கிறோம்.
+
+===>It is a non relational database with dynamic schema.
+
+===>It is easy to scale.
+
+===>It is faster than traditional databases.
+
+*************************************************************************************************************************
+
+4.What is document?
+
+===>A record in MongoDB is a document,which is a data structure composed of field and value pairs.
+    MongoDB க்குள் இருக்கும் ஒரு சிறிய record ஐ தான் நாம் document என்கிறோம்.
+    அதனுடைய structure ஆனது key : value ஆக இருக்கும்.
+
+===>MongoDB documents are similar to JSON objects.
+    MongoDB document ஆனது JSON object ஐ போன்று இருக்கும்.
+
+===>The values of fields may include other documents, arrays and arrays of documents.
+    ஒரு field உடைய value ஆனது JSON object ஆக இருக்கலாம்
+                                     Array ஆக இருக்கலாம் 
+                 அல்லது Array Of Objetct ஆக இருக்கலாம்.   
+
+===>Documents are analogous to structures in programming languages that associate keys with values
+    E.g Dictionaries, hashes, maps and associative arrays.
+
+*************************************************************************************************************************
+
+5.What is collection?
+
+===>A group of MongoDB documents is called a collection.
+    எண்ணற்ற MongoDB documents ஐ collection என்கிறோம்.
+
+===>Collections are analogous to tables in relational databases.
+
+===>Unlike a table, however, a collection does not require its documents to have the same schema.
+
+*************************************************************************************************************************
+
+6.Mongodb vs MySQL
+
+===>MySQL is a Relational Database Management System (RDBMS) from Oracle that's been around since the 1990's.
+    MongoDB is a NoSQL database program that uses JSON-like documents with optional schemas. 
+    
+    MySQL என்பது Relational Database ஆகும்.
+    இதுவே MongoDB என்பது Non Relational Database ஆகும்.UnStructured Database என்றும் கூறலாம்.
+    MongoDB ல் store செய்யக்கூடிய data ஐ JSON ல் தான் சேமித்து வைப்போம் அல்லது JSON ஆக இருக்கும்.
+
+===>MySQL is a relational database, which means it has a table-based data structure with a strict,predefined schema required.
+    MongoDB, on the other hand, is a NoSQL database, which means the it's built without a predefined schema.
+
+    MySQL ல் tables என்ற concept.
+    MongoDB ல் collection or document(JSON) என்ற concept.
+
+===>MongoDB is faster than MySQL due to its ability to handle large amounts of unstructured data when compared to MySQL.
+    
+    MySQL ல் unstructured data ஐ handle செய்வது கடினமாக இருக்கும்.
+    MongoDB ல் எளிமையானது.
+    E.g : social meadia (FAcebook and etc....,)
+
+*************************************************************************************************************************
+
+7.MongoDB creation of database, collections, documents
+
+
+creation of database:
+
+ஒரு database ஐ create (or) select செய்வதற்கு
+use <database_name>;
+
+use guvi;
+"guvi" என்ற database உருவாகும்.
+
+நாம் எந்த database ல் உள்ளோம் என்பதை காண
+show databases; (or) show dbs;
+
+                ************************************************************
+
+creation of collections:
+
+ஒரு collection ஐ create செய்வதற்கு
+db.createCollection("users");
+
+"users" என்ற collection உருவாகும்.
+
+                ************************************************************
+
+insert of documents:
+
+புதிதாக ஒரு document ஐ சேர்க்க or insert செய்வதற்கு
+db.users.insertOne ( 
+    {
+        name:"Karan", 
+        age:30, 
+        city:"Erode"
+    } 
+    );
+
+name:"Karan", age:30, city:"Erode" என்ற document, insert ஆகிவிடும்.
+
+
+
+புதிதாக ஒன்று அல்லது அதற்கு மேற்பட்ட document ஐ சேர்க்க or insert செய்வதற்கு
+db.users.insertMany (
+[
+    {
+        name:"Vijay", 
+        age:35, 
+        city:"Salem"
+    },
+
+    {
+        name:"Arjun", 
+        age:45, 
+        city:"CBE"
+    }
+]
+);
+
+name:"Vijay", age:35, city:"Salem" மற்றும்
+name:"Arjun", age:45, city:"CBE" என்ற இரண்டு document, insert ஆகிவிடும்.
+    
+                ************************************************************
+
+8.find() methods:
+
+===>find all documents in the collection
+    ஒரு collection ல் உள்ள அனைத்து documents யும் காண்பதற்கு அல்லது view செய்வதற்கு
+
+        query: db.collectionname.find( {} );
+
+               db.users.find();
+               users என்ற collection ல் உள்ள அனைத்து documents யும் காணலாம்.
+
+
+===>find separate documents in the collection
+    ஒரு collection ல் உள்ள குறிப்பிட்ட ஒரு documents ஐ மட்டும் காண்பதற்கு அல்லது view செய்வதற்கு
+
+        query: db.collectionname.find( {separate document condition} );
+
+               db.users.find( {name:"David Wilson"} );
+               users என்ற collection ல் உள்ள David Wilson என்ற பெயருக்கு உண்டான documents ஐ மட்டும் காணலாம்.
+
+
+               db.users.find( { "address.country" : "USA" } );
+               users என்ற collection ல் உள்ள USA என்ற பெயருக்கு உண்டான documents ஐ மட்டும் காணலாம்.
+
+                ************************************************************
+
+9.projection methods:
+
+===>It means to filter and display the documents displayed in find methods
+    Projection methods are used to display only a specific document.
+
+    find methods க்குள் காட்டும் document களை filter செய்து காட்டுவது அதாவது 
+    குறிப்பிட்ட document ஐ மட்டும் காட்டுவதற்கு projection methods பயன்படுகிறது.
+
+===>projection
+
+            query: db.collectionname.find ( {separate document condition}, {needed conditions} );
+
+===>Example
+
+
+        db.users.find ( { "address.country" : "USA" }, { name:1, email:1 } );
+        users என்ற collection ல் உள்ள USA என்ற பெயருக்கு உண்டான documents ஐ மட்டும் காணலாம்.
+        அதனுடன் name and email என்ற details மட்டும் வரும்.
+
+        db.users.find ( { "address.country" : "USA" }, {_id:0, name:1, email:1 } );
+        users என்ற collection ல் உள்ள USA என்ற பெயருக்கு உண்டான documents ஐ மட்டும் காணலாம்.
+        அதனுடன் name and email என்ற details மட்டும் வரும்.
+        மேலும் id ஐ காட்டாது.
+
+        "0" என்று கொடுத்தால் document ஐ காட்டாது.
+        "1" என்று கொடுத்தால் document ஐ காட்டும்.
+        _id : 0 என்பது மட்டும் mandatory.
+
+*************************************************************************************************************************
+
+9.use of operators in find() query"
+
+    operators:
+        * $eq   =   => equal to
+        * $gt   >   => greater than
+        * $gte  >=  => greater than or equal to
+        * $lt   <   => less than
+        * $lte  <=  => less than or equal to
+        * $ne   !=  => not equal to
+        * $in       => in
+
+    Example:
+
+        db.users.find ({}, {_id : 0 , age : 1});
+        users என்ற collection ல் உள்ள age என்ற பெயருக்கு உண்டான documents ஐ மட்டும் காணலாம்.
+
+        db.users.find ( { age : { $gt : 35 } } );
+        age = 35 க்கு மேல் உள்ள documents ஐ மட்டும் காணலாம்.
+
+        db.users.find ( { age : { $gte : 35 } } );
+        age = 35 மற்றும் அதற்கு மேல் உள்ள documents ஐ மட்டும் காணலாம்.
+
+        db.users.find ( { age : { $gte : 35 } } ).limit(1) ; 
+        age = 35 க்கு மேல் எத்தனை documents இருந்தாலும் முதலில் உள்ள document ஐ மட்டும் காட்டும்.
+        ஏனென்றால் limit என்ற method பயன்படுகிறது.
+
+*************************************************************************************************************************
